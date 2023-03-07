@@ -10,7 +10,7 @@ api = NinjaAPI()
 def todos(request):
     return Todo.objects.all()
 
-@api.get("/todos/{todo_id}", response={200: TodoSchema})
+@api.get("/todos/{todo_id}", response={200: TodoSchema, 404: NotFoundSchema})
 def todo(request, todo_id: int):
     try:
         todo = Todo.objects.get(pk=todo_id)
@@ -34,7 +34,7 @@ def change_todo(request, todo_id: int, data: TodoSchema):
     except Todo.DoesNotExist as e:
         return 404, {"message": "This to do does not exist"}
 
-@api.delete("/todos/{todo_id}", response={200: None})
+@api.delete("/todos/{todo_id}", response={200: None, 404: NotFoundSchema})
 def delete_todo(request, todo_id: int):
     try:
         todo = Todo.objects.get(pk=todo_id)
